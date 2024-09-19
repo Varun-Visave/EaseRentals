@@ -1,0 +1,117 @@
+<style>
+  /* Style for the pull tab */
+  .chatbot-pull-tab {
+    cursor: pointer;
+    z-index: 1000;
+  }
+
+  .chatbot-pull-tab .btn {
+    border-radius: 50%;
+  }
+
+  /* Style for the collapsible chat window */
+  .chatbot-window {
+    position: fixed;
+    bottom: 0;
+    width: 300px;
+    height: 400px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    overflow: auto;
+    transform: translateX(0%); /* Start off-screen */
+    transition: transform 0.3s ease;
+    z-index: 1000; /* Ensure it's on top of other elements */
+  }
+
+  .chatbot-window.show {
+    transform: translateX(-10%); /* Slide in */
+  }
+
+  .chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+</style>
+
+<!-- Chatbot Pull Tab -->
+<div
+  id="chatbotPullTab"
+  class="chatbot-pull-tab position-fixed bottom-0 end-0 mb-3 me-3"
+>
+  <button class="btn">
+    <img
+      src="https://firebasestorage.googleapis.com/v0/b/learning-platform-9b63e.appspot.com/o/images%2Frobot-img.png?alt=media&token=87fee5ff-c0f4-449d-b9c7-06c3e25d8c01"
+      height="60px"
+      alt="Robot Image"
+    />
+  </button>
+</div>
+
+<!-- Collapsible Chat Window -->
+<div
+  id="chatbotWindow"
+  class="chatbot-window position-fixed bottom-0 end-0 mb-3 me-3 p-3 border rounded d-none"
+>
+  <div class="chat-header">
+    <button id="chatbotClose" class="btn-close" aria-label="Close"></button>
+    <h5>Chat with us</h5>
+  </div>
+  <div class="chat-area">
+    <!-- Response area -->
+    <div id="chatResponse"></div>
+  </div>
+  <input
+    type="text"
+    id="chatInput"
+    class="form-control mt-2"
+    placeholder="Type your message..."
+  />
+</div>
+
+<script>
+  document
+    .getElementById("chatbotPullTab")
+    .addEventListener("click", function () {
+      const chatbotWindow = document.getElementById("chatbotWindow");
+      chatbotWindow.classList.toggle("d-none");
+    });
+
+  document
+    .getElementById("chatbotClose")
+    .addEventListener("click", function () {
+      const chatbotWindow = document.getElementById("chatbotWindow");
+      chatbotWindow.classList.add("d-none"); // Hide window
+    });
+
+  document
+    .getElementById("chatInput")
+    .addEventListener("keypress", function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        const inputField = document.getElementById("chatInput");
+        const userMessage = inputField.value;
+        inputField.value = "";
+        console.log(userMessage);
+
+        // localStorage.setItem("user-prompt", userMessage);
+        fetch(
+          `http://localhost:3000/test?prompt=${encodeURIComponent(userMessage)}`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("GET request successful:", data);
+            const responseDiv = document.createElement("div");
+          responseDiv.innerText = data.message;
+
+          const chatResponse = document.getElementById("chatResponse");
+          
+          chatResponse.appendChild(responseDiv);
+          chatResponse.appendChild(document.createElement("hr"));
+        })
+        .catch((error) => {
+          console.error("Error with GET request:", error);
+        });
+      }
+    });
+</script>
