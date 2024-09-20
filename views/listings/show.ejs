@@ -33,11 +33,11 @@
 </div>
 <br />
 <div class="row">
-  <div class="offset-2">
+  <div class="offset-2 ">
     <!-- <form method="PUT" action="/listings/<%= listing._id %>/edit?_method=POST">
       <button class="edit">Edit this Listing</button>
     </form> -->
-    <button class="btn btn-dark edit-btn edit-button"><a href="/listings/<%= listing._id %>/edit">Edit this Listing</a></button>
+    <button class="btn btn-dark edit-btn edit-button "><a class="button" href="/listings/<%= listing._id %>/edit">Edit this Listing</a></button>
     <br/>
     <form method="POST" action="/listings/<%=listing._id %>?_method=DELETE">
       <button class="btn btn-danger edit-btn">Delete this Listing</button>
@@ -49,7 +49,7 @@
 
 <!-- review  -->
 <div class="rate">
-  <div class="col-8 offset-3">
+  <div class="col-8 offset-3 w-100">
     <h4 class="leaveARating">Leave a Rating</h4>
     <br>    
     <form action="/listings/<%=listing._id%>/reviews" method="POST" novalidate class="needs-validation">

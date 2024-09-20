@@ -9,9 +9,9 @@ const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressErrors = require("./utils/ExpressErrors.js");
 const {listingSchema, reviewSchema} = require("./schema.js");
 const Reviews = require("./models/review.js");
+const session = require("express-session");
+const flash = require("connect-flash");
 
-const listings = require("./routes/listing.js");
-// const review = require("./routes/review.js");
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/easeRentals";
 
@@ -34,13 +34,35 @@ app.use(methodOverride("_method"));
 app.engine('ejs', ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 
+//Sessions
+const sessionOptions = {
+    secret: "easeRentals",
+    resave: false,  
+    saveUninitialized: true,
+    cookie: {
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000, 
+        maxAge: 7 * 24 * 60 * 60 * 1000, // day * hrs * mins * sec * milisecond
+        httpOnly: true, // prevents client side js from accessing cookies
+    }
+};
 
+app.use(session(sessionOptions));
+app.use(flash()); //always use it before routes as it needs routes for working
+
+//middleware for cookies
+app.use((req, res, next)=>{
+    res.locals.success = req.flash("success");
+    next();  
+});
+
+//router objects
+const listings = require("./routes/listing.js"); 
+// const review = require("./routes/review.js");
 
 //home route
 app.get("/", (req, res) => {
    res.redirect("/listings");
 });
-
 
 //validate review
 const validateReview = (req, res, next)=>{
@@ -66,7 +88,7 @@ app.post("/listings/:id/reviews", wrapAsync(async(req, res)=>{
     listing.reviews.push(newReview);   
     await newReview.save(); 
     await listing.save();   
-    
+    req.flash("success", "Review Posted Successfully!");
     res.redirect(`/listings/${listing._id}`);
 
 }));
@@ -76,7 +98,7 @@ app.delete("/listings/:id/reviews/:reviewId", wrapAsync(async (req, res)=>{
     let { id , reviewId } = req.params;
     await Listing.findByIdAndUpdate(id, {$pull:{reviews: reviewId}});
     await Reviews.findByIdAndDelete(reviewId);
-    console.log(id);
+    req.flash("success", "Review Deleted Scuccessfully!");
     res.redirect(`/listings/${id}`);
 }));
 
