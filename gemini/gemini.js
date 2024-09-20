@@ -13,9 +13,9 @@ const model = genAI.getGenerativeModel({
   model: "gemini-1.5-flash",
   generationConfig: {
     candidateCount: 1,
-    stopSequences: ["x"],
-    maxOutputTokens: 50,
-    temperature: 1.0,
+    stopSequences: [""],
+    maxOutputTokens: 120,
+    temperature: 0.8,
   },
 });
 
@@ -25,11 +25,11 @@ async function generateContent(userPrompt) {
   try {
     const result = await model.generateContent(
       // window.localStorage.getItem("user-prompt")
-      userPrompt
+      userPrompt+", dont give any introduction, dont give any conclusion, only list out, only answer to this prompt if this a travelling or health care related question else respond with 'I am here to help you with your travel queries and needs only.'"
     );
     // console.log(result.response.text());
     geminiResponse = result.response.text();
-    console.log(geminiResponse);
+    // console.log(geminiResponse);
     return geminiResponse;
   } catch (error) {
     console.error("Error generating content:", error);
@@ -37,13 +37,13 @@ async function generateContent(userPrompt) {
 }
 
 app.get("/test", async (req, res) => {
-  console.log("GET request successful");
+  // console.log("GET request successful");
   const userPrompt = req.query.prompt;
-  console.log(userPrompt)
+  // console.log(userPrompt)
   const geminiResponse = await generateContent(userPrompt);
   res.json({ message: geminiResponse });
 });
 
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Gemini Server is running on port ${port}`);
 });
