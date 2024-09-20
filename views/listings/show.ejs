@@ -37,10 +37,10 @@
     <!-- <form method="PUT" action="/listings/<%= listing._id %>/edit?_method=POST">
       <button class="edit">Edit this Listing</button>
     </form> -->
-    <button class="btn btn-dark edit-btn edit-button "><a class="button" href="/listings/<%= listing._id %>/edit">Edit this Listing</a></button>
+    <button class="btn btn-dark edit-btn edit-button"><a href="/listings/<%= listing._id %>/edit">Edit this Listing</a></button>
     <br/>
     <form method="POST" action="/listings/<%=listing._id %>?_method=DELETE">
-      <button class="btn btn-danger edit-btn">Delete this Listing</button>
+      <button class="btn btn-danger edit-btn">Delete This Listing</button>
     </form>
     <br/><br/>
   </div>
@@ -53,9 +53,10 @@
     <h4 class="leaveARating">Leave a Rating</h4>
     <br>    
     <form action="/listings/<%=listing._id%>/reviews" method="POST" novalidate class="needs-validation">
+      &emsp; &emsp; &emsp; &emsp; <span id="ratingValue" style="font-weight: bold; margin-left: 10px;">⭐⭐⭐</span>
       <div>
         <label for="rating" class="label">Rating</label>
-        <input type="range" min="1" max="5" id="rating" name="review[rating]" />
+        <input type="range" min="1" max="5" id="rating" name="review[rating]" oninput="updateRatingValue(this.value)" /><br>
       </div>
       <div class="mb-3 mt-3">
         <label for="comment" class="label">
@@ -93,3 +94,12 @@
 </div>
   </div>
 </div>
+
+<script>
+  // JavaScript to update the rating value in real-time
+  function updateRatingValue(value) {
+    const ratingValueElement = document.getElementById('ratingValue');
+    let stars = '⭐'.repeat(value); // Repeat the star emoji based on the rating value
+    ratingValueElement.textContent = stars;
+  }
+</script>

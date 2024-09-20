@@ -1,0 +1,420 @@
+<style>
+  /* Style for the pull tab */
+  .chatbot-pull-tab {
+    cursor: pointer;
+    z-index: 1000;
+  }
+
+  .chatbot-pull-tab .btn {
+    border-radius: 50%;
+  }
+
+  /* Style for the collapsible chat window */
+  .chatbot-window {
+    position: fixed;
+    bottom: 0;
+    width: 300px;
+    height: 400px;
+    background-color: #ffffff00;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    overflow: auto;
+    transform: translateX(0%); /* Start off-screen */
+    transition: transform 0.3s ease;
+    z-index: 1000; /* Ensure it's on top of other elements */
+    backdrop-filter: blur(10px);
+  }
+
+  .chatbot-window.show {
+    transform: translateX(-10%); /* Slide in */
+  }
+
+  .chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  #userMessageDiv {
+    background-color: #000000;
+    border-radius: 10px 10px 0 0;
+    color: white;
+    padding: 1em;
+  }
+  #geminiMessageDiv {
+    background-color: #000000;
+    border-radius: 0px 0px 10px 10px;
+    color: white;
+    padding: 1em;
+  }
+
+  /* From Uiverse.io by Juanes200122 */
+  .pl {
+    width: 2em;
+    height: 2em;
+  }
+
+  .pl__ring {
+    animation: ringA 2s linear infinite;
+  }
+
+  .pl__ring--a {
+    stroke: #000000;
+  }
+
+  .pl__ring--b {
+    animation-name: ringB;
+    stroke: #7e7e7e;
+  }
+
+  .pl__ring--c {
+    animation-name: ringC;
+    stroke: #686868;
+  }
+
+  .pl__ring--d {
+    animation-name: ringD;
+    stroke: #000000;
+  }
+
+  /* Animations */
+  @keyframes ringA {
+    from,
+    4% {
+      stroke-dasharray: 0 660;
+      stroke-width: 20;
+      stroke-dashoffset: -330;
+    }
+
+    12% {
+      stroke-dasharray: 60 600;
+      stroke-width: 30;
+      stroke-dashoffset: -335;
+    }
+
+    32% {
+      stroke-dasharray: 60 600;
+      stroke-width: 30;
+      stroke-dashoffset: -595;
+    }
+
+    40%,
+    54% {
+      stroke-dasharray: 0 660;
+      stroke-width: 20;
+      stroke-dashoffset: -660;
+    }
+
+    62% {
+      stroke-dasharray: 60 600;
+      stroke-width: 30;
+      stroke-dashoffset: -665;
+    }
+
+    82% {
+      stroke-dasharray: 60 600;
+      stroke-width: 30;
+      stroke-dashoffset: -925;
+    }
+
+    90%,
+    to {
+      stroke-dasharray: 0 660;
+      stroke-width: 20;
+      stroke-dashoffset: -990;
+    }
+  }
+
+  @keyframes ringB {
+    from,
+    12% {
+      stroke-dasharray: 0 220;
+      stroke-width: 20;
+      stroke-dashoffset: -110;
+    }
+
+    20% {
+      stroke-dasharray: 20 200;
+      stroke-width: 30;
+      stroke-dashoffset: -115;
+    }
+
+    40% {
+      stroke-dasharray: 20 200;
+      stroke-width: 30;
+      stroke-dashoffset: -195;
+    }
+
+    48%,
+    62% {
+      stroke-dasharray: 0 220;
+      stroke-width: 20;
+      stroke-dashoffset: -220;
+    }
+
+    70% {
+      stroke-dasharray: 20 200;
+      stroke-width: 30;
+      stroke-dashoffset: -225;
+    }
+
+    90% {
+      stroke-dasharray: 20 200;
+      stroke-width: 30;
+      stroke-dashoffset: -305;
+    }
+
+    98%,
+    to {
+      stroke-dasharray: 0 220;
+      stroke-width: 20;
+      stroke-dashoffset: -330;
+    }
+  }
+
+  @keyframes ringC {
+    from {
+      stroke-dasharray: 0 440;
+      stroke-width: 20;
+      stroke-dashoffset: 0;
+    }
+
+    8% {
+      stroke-dasharray: 40 400;
+      stroke-width: 30;
+      stroke-dashoffset: -5;
+    }
+
+    28% {
+      stroke-dasharray: 40 400;
+      stroke-width: 30;
+      stroke-dashoffset: -175;
+    }
+
+    36%,
+    58% {
+      stroke-dasharray: 0 440;
+      stroke-width: 20;
+      stroke-dashoffset: -220;
+    }
+
+    66% {
+      stroke-dasharray: 40 400;
+      stroke-width: 30;
+      stroke-dashoffset: -225;
+    }
+
+    86% {
+      stroke-dasharray: 40 400;
+      stroke-width: 30;
+      stroke-dashoffset: -395;
+    }
+
+    94%,
+    to {
+      stroke-dasharray: 0 440;
+      stroke-width: 20;
+      stroke-dashoffset: -440;
+    }
+  }
+
+  @keyframes ringD {
+    from,
+    8% {
+      stroke-dasharray: 0 440;
+      stroke-width: 20;
+      stroke-dashoffset: 0;
+    }
+
+    16% {
+      stroke-dasharray: 40 400;
+      stroke-width: 30;
+      stroke-dashoffset: -5;
+    }
+
+    36% {
+      stroke-dasharray: 40 400;
+      stroke-width: 30;
+      stroke-dashoffset: -175;
+    }
+
+    44%,
+    50% {
+      stroke-dasharray: 0 440;
+      stroke-width: 20;
+      stroke-dashoffset: -220;
+    }
+
+    58% {
+      stroke-dasharray: 40 400;
+      stroke-width: 30;
+      stroke-dashoffset: -225;
+    }
+
+    78% {
+      stroke-dasharray: 40 400;
+      stroke-width: 30;
+      stroke-dashoffset: -395;
+    }
+
+    86%,
+    to {
+      stroke-dasharray: 0 440;
+      stroke-width: 20;
+      stroke-dashoffset: -440;
+    }
+  }
+  /* From Uiverse.io by arshshaikh06 */
+  .spinner {
+    background-image: linear-gradient(rgb(186, 66, 255) 35%, rgb(0, 225, 255));
+    width: 50px;
+    height: 50px;
+    animation: spinning82341 3s linear infinite, hue 1s ease-in-out infinite;
+    text-align: center;
+    border-radius: 50px;
+    filter: blur(1px);
+    box-shadow: 0px -5px 20px 0px rgb(186, 66, 255),
+      0px 5px 20px 0px rgb(0, 225, 255);
+  }
+
+  .spinner1 {
+    background-color: rgb(214, 214, 214);
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    filter: blur(10px);
+  }
+
+  @keyframes spinning82341 {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes hue {
+    0% {
+      filter: hue-rotate(0deg);
+    }
+
+    100% {
+      filter: hue-rotate(360deg);
+    }
+  }
+</style>
+
+<!-- Chatbot Pull Tab -->
+<div
+  id="chatbotPullTab"
+  class="chatbot-pull-tab position-fixed bottom-0 end-0 mb-3 me-3"
+>
+  <button class="btn">
+    <div class="spinner">
+      <div class="spinner1">
+        <!-- <img
+          src="https://firebasestorage.googleapis.com/v0/b/learning-platform-9b63e.appspot.com/o/images%2Frobot-img.png?alt=media&token=87fee5ff-c0f4-449d-b9c7-06c3e25d8c01"
+          height="60px"
+          alt="Robot Image"
+        /> -->
+      </div>
+    </div>
+  </button>
+</div>
+
+<!-- Collapsible Chat Window -->
+<div
+  id="chatbotWindow"
+  class="chatbot-window position-fixed bottom-0 end-0 mb-3 me-3 p-3 border rounded d-none"
+>
+  <div class="chat-header">
+    <button id="chatbotClose" class="btn-close" aria-label="Close"></button>
+    <h5>Chat with us</h5>
+  </div>
+  <div class="chat-area">
+    <!-- Response area -->
+    <div id="chatResponse">
+      <div id="geminiMessageDiv"> Hello, How may I Help You Today ?</div>
+      <hr />
+    </div>
+  </div>
+  <input
+    type="text"
+    id="chatInput"
+    class="form-control mt-2"
+    placeholder="Type your message..."
+  />
+</div>
+
+<!-- chatbot window and sending prompt to gemini server -->
+<script>
+  document
+    .getElementById("chatbotPullTab")
+    .addEventListener("click", function () {
+      const chatbotWindow = document.getElementById("chatbotWindow");
+      chatbotWindow.classList.toggle("d-none");
+    });
+
+  document
+    .getElementById("chatbotClose")
+    .addEventListener("click", function () {
+      const chatbotWindow = document.getElementById("chatbotWindow");
+      chatbotWindow.classList.add("d-none");
+    });
+
+  document
+    .getElementById("chatInput")
+    .addEventListener("keypress", function (event) {
+      if (
+        event.key === "Enter" &&
+        document.getElementById("chatInput").value.trim() !== ""
+      ) {
+        console.log("this got executed");
+        event.preventDefault();
+        const inputField = document.getElementById("chatInput");
+        const userMessage = inputField.value;
+        inputField.value = "";
+        // console.log(userMessage);
+        const userDiv = document.createElement("div");
+        userDiv.id = "userMessageDiv";
+        userDiv.innerText = "You: " + userMessage;
+
+        const chatResponse = document.getElementById("chatResponse");
+        chatResponse.appendChild(userDiv);
+
+        const loadingDiv = document.createElement("div");
+        loadingDiv.innerHTML = `
+          <svg viewBox="0 0 240 240" height="240" width="240" class="pl">
+            <circle stroke-linecap="round" stroke-dashoffset="-330" stroke-dasharray="0 660" stroke-width="20" stroke="#000" fill="none" r="105" cy="120" cx="120" class="pl__ring pl__ring--a"></circle>
+            <circle stroke-linecap="round" stroke-dashoffset="-110" stroke-dasharray="0 220" stroke-width="20" stroke="#000" fill="none" r="35" cy="120" cx="120" class="pl__ring pl__ring--b"></circle>
+            <circle stroke-linecap="round" stroke-dasharray="0 440" stroke-width="20" stroke="#000" fill="none" r="70" cy="120" cx="85" class="pl__ring pl__ring--c"></circle>
+            <circle stroke-linecap="round" stroke-dasharray="0 440" stroke-width="20" stroke="#000" fill="none" r="70" cy="120" cx="155" class="pl__ring pl__ring--d"></circle>
+          </svg>
+      `;
+        loadingDiv.id = "loading"; // Give it an ID so we can remove it later
+        chatResponse.appendChild(loadingDiv);
+
+        // localStorage.setItem("user-prompt", userMessage);
+        fetch(
+          `http://localhost:3000/test?prompt=${encodeURIComponent(userMessage)}`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            // console.log("GET request successful:", data);
+
+            const responseDiv = document.createElement("div");
+            responseDiv.id = "geminiMessageDiv";
+            responseDiv.innerText = "Bot: " + data.message;
+
+            const chatResponse = document.getElementById("chatResponse");
+
+            const loadingElement = document.getElementById("loading");
+            if (loadingElement) {
+              chatResponse.removeChild(loadingElement);
+            }
+            chatResponse.appendChild(responseDiv);
+            chatResponse.appendChild(document.createElement("hr"));
+          })
+          .catch((error) => {
+            console.error("Error with GET request:", error);
+          });
+      }
+    });
+</script>
