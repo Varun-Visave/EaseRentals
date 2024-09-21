@@ -37,7 +37,7 @@
     <!-- <form method="PUT" action="/listings/<%= listing._id %>/edit?_method=POST">
       <button class="edit">Edit this Listing</button>
     </form> -->
-    <button class="btn btn-dark edit-btn edit-button mb-3"><a href="/listings/<%= listing._id %>/edit" class="text-decoration-none text-reset">Edit this Listing</a></button>
+    <button class="btn btn-dark edit-btn edit-button mb-3"><a class="button text-decoration-none text-reset" href="/listings/<%= listing._id %>/edit">Edit this Listing</a></button>
     <br/>
     <form method="POST" action="/listings/<%=listing._id %>?_method=DELETE">
       <button class="btn btn-danger edit-btn">Delete This Listing</button>
