@@ -74,14 +74,14 @@ router.delete("/:id", wrapAsync(async (req, res) => {
 // Show route
 router.get("/:id", wrapAsync(async (req, res) => {
     let { id } = req.params;
-
-
     const listing = await Listing.findById(id).populate("reviews");
     if (!listing) {
-        return res.status(404).send('Listing not found');
-    }
-
+        req.flash("error", "Requested listing does not exist!");
+        res.redirect("/listings");
+    } 
     res.render("listings/show.ejs", { listing });
 }));
+
+
 
 module.exports = router;
