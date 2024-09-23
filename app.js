@@ -52,7 +52,7 @@ app.use(session(sessionOptions));
 app.use(flash()); //always use it before routes as it needs routes for working
 
 
-// authentication //use it after session as passpot(lib or express) uses session to keep the track of user login        
+//authentication //use it after session as passpot(lib or express) uses session to keep the track of user login        
 app.use(passport.initialize());
 app.use(passport.session()); //this is used keep the user different sessions logged in
 passport.use(new LocalStrategy(User.authenticate())); // use static authentication method of model in LocalStrategy

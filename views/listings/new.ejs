@@ -4,29 +4,47 @@
   <div class="col-8 offset-2">
     <h3>Create a new listing</h3>
     <form method="POST" action="/listings" class="needs-validation">
-        <div>
-            <label for="title" class="form-label">Title</label>
-            <input name="listing[title]" placeholder="Enter a Catchy Title" class="form-control" required>
+      <div>
+        <label for="title" class="form-label">Title</label>
+        <input
+          name="listing[title]"
+          placeholder="Enter a Catchy Title"
+          class="form-control"
+          required
+        />
+      </div>
+      <div class="valid-feedback">Title looks good!</div>
+      <br />
+      <div>
+        <label for="description" class="form-label">Description</label>
+        <textarea name="listing[description]" class="form-control" required>
+        </textarea>
+      </div>
+
+      <br />
+      <div>
+        <label for="image" class="form-label">Image Link</label>
+        <input
+          name="listing[image][url]"
+          type="text"
+          class="form-control"
+          placeholder="Enter the IMG URL/Link"
+          required
+        />
+      </div>
+
+      <br />
+      <div class="row">
+        <div class="mb-3 col-md-4">
+          <label for="price" class="form-label">Price</label>
+          <input
+            name="listing[price]"
+            type="number"
+            class="form-control"
+            placeholder="Enter Price"
+            required
+          />
         </div>
-        <div class="valid-feedback">Title looks good!</div>
-        <br>
-        <div>
-            <label for="description" class="form-label">Description</label>
-            <textarea name="listing[description]"  class="form-control" required> </textarea>
-        </div>
-        
-        <br>
-        <div>
-            <label for="image" class="form-label">Image Link</label>
-            <input name="listing[image][url]" type="text" class="form-control" placeholder="Enter the IMG URL/Link" required>
-        </div>
-        
-        <br>
-        <div class="row">
-            <div class="mb-3 col-md-4">
-                <label for="price" class="form-label">Price</label>
-                <input name="listing[price]" type="number" class="form-control" placeholder="Enter Price" required>
-            </div>
 
         <div class="mb-3 col-md-8">
           <label for="country" class="form-label">Country</label>
