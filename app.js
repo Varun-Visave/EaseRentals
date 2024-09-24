@@ -66,6 +66,7 @@ app.use((req, res, next)=>{
     res.locals.error = req.flash("error");
     next();  
 });
+
 //router objects;
 const listings = require("./routes/listing.js"); 
 // const review = require("./routes/review.js");
@@ -116,11 +117,11 @@ app.delete("/listings/:id/reviews/:reviewId", wrapAsync(async (req, res)=>{
 }));
 
 //privacy and terms 
-app .get("/privacy", (req, res) => {
+app.get("/privacy", (req, res) => {
     res.render("includes/privacy.ejs");
 })
 
-app .get("/terms", (req, res) => {
+app.get("/terms", (req, res) => {
     res.render("includes/terms.ejs");
 })
 
