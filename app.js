@@ -15,6 +15,11 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
 
+//router objects;
+const listings = require("./routes/listing.js"); 
+// const review = require("./routes/review.js");
+const user = require("./routes/user.js");   
+
 const MONGO_URL = "mongodb://127.0.0.1:27017/easeRentals";
 
 main()
@@ -60,6 +65,7 @@ passport.use(new LocalStrategy(User.authenticate())); // use static authenticati
 passport.serializeUser(User.serializeUser()); // to store users info in a session
 passport.deserializeUser(User.deserializeUser()); // to unstore the users info from a session
 
+
 //middleware for cookies
 app.use((req, res, next)=>{
     res.locals.success = req.flash("success");
@@ -67,10 +73,6 @@ app.use((req, res, next)=>{
     next();  
 });
 
-//router objects;
-const listings = require("./routes/listing.js"); 
-// const review = require("./routes/review.js");
-const user = require("./routes/user.js");   
 
 //home route
 app.get("/", (req, res) => {
