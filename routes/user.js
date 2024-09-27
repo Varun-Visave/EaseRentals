@@ -1,8 +1,8 @@
-const express = require("express");
-const router = express.Router();
+// const express = require("express");
+// const router = express.Router();
 
-router.get("/signup",(req, res)=>{
-    res.render("users/signup.ejs");
-})
+// router.get("/signup",(req, res)=>{
+//     res.render("/signup.ejs");
+// })
 
-module.exports = router;
+// module.exports = router;

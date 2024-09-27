@@ -1,0 +1,152 @@
+<%- layout("/layouts/boilerplate") %>
+
+<!-- Login Page CSS -->
+<style>
+  body {
+    background-color: #ffffff;
+    font-family: Arial, sans-serif;
+  }
+
+  .container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .login-container {
+    background-color: #fff;
+    border: 2px solid #c95050;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  h1 {
+    color: #c95050;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  label {
+    color: #c95050;
+    font-weight: bold;
+  }
+
+  input {
+    border: 2px solid #c95050;
+    border-radius: 5px;
+    padding: 10px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+
+  input:focus {
+    border-color: #c95050;
+    box-shadow: 0px 0px 8px rgba(255, 77, 77, 0.8);
+    outline: none;
+  }
+
+  .btn {
+    background-color: #c95050;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+  }
+
+  .btn:hover {
+    background-color: #c95050;
+  }
+
+  .valid-feedback {
+    color: green;
+  }
+
+  .invalid-feedback {
+    color: red;
+  }
+
+  .form-control:invalid {
+    border-color: red;
+  }
+
+  .form-control:valid {
+    border-color: green;
+  }
+</style>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="login-container">
+        <h1>Login to EaseRentals</h1>
+        <form action="/login" method="POST" class="needs-validation" novalidate>
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input
+              name="username"
+              placeholder="Enter Username"
+              id="username"
+              type="text"
+              class="form-control"
+              required
+            />
+            <div class="valid-feedback">Looks Good!</div>
+            <div class="invalid-feedback">Please enter your username.</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input
+              name="password"
+              placeholder="Enter Password"
+              id="password"
+              type="password"
+              class="form-control"
+              required
+            />
+            <div class="valid-feedback">Looks Good!</div>
+            <div class="invalid-feedback">Please enter your password.</div>
+          </div>
+
+          <button type="submit" class="btn btn-success">Login</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // JavaScript to enable Bootstrap form validation
+  (function () {
+    'use strict';
+
+    window.addEventListener('load', function () {
+      // Fetch all the forms we want to apply custom validation to
+      var forms = document.getElementsByClassName('needs-validation');
+      // Loop over them and prevent submission
+      var validation = Array.prototype.filter.call(forms, function (form) {
+        form.addEventListener('submit', function (event) {
+          if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    }, false);
+  })();
+</script>

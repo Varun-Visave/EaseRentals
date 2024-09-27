@@ -17,8 +17,9 @@ const User = require("./models/user.js");
 
 //router objects;
 const listings = require("./routes/listing.js"); 
+const user = require("./models/user.js");
 // const review = require("./routes/review.js");
-const user = require("./routes/user.js");   
+// const user = require("./routes/user.js");   
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/easeRentals";
 
@@ -70,6 +71,7 @@ passport.deserializeUser(User.deserializeUser()); // to unstore the users info f
 app.use((req, res, next)=>{
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
+    res.locals.currtUser = req.user;
     next();  
 });
 
@@ -94,7 +96,8 @@ const validateReview = (req, res, next)=>{
 //router  //belongs to ln 70-73
 app.use("/listings", listings); // router methode
 // app.use("/listings/:id/reviews", review) // router method
-app.use("/users", user); // router method   
+// app.use("/users", user); // router method   
+
 
 //Reviews
 // POST review route
@@ -125,6 +128,48 @@ app.get("/privacy", (req, res) => {
 
 app.get("/terms", (req, res) => {
     res.render("includes/terms.ejs");
+})
+
+//signup
+app.get("/signup",(req, res)=>{
+    res.render("listings/signup.ejs");
+})
+
+app.post("/signup", async(req, res)=>{
+    try{
+        let {username, password, email} = req.body
+    const newUser = new User({email, username});
+    const registeredUser = await User.register(newUser, password);
+    req.login(registeredUser)
+    console.log(registeredUser);
+    req.flash("success", "Welcome to EaseRentals");
+    res.redirect("/listings");
+    }catch(e){
+        req.flash("error", e.message);
+        res.redirect("/signup");
+    }
+})  
+
+//login
+app.get("/login", (req, res)=>{
+    res.render("listings/login.ejs");
+    //username test, pass- 12345
+})
+
+app.post("/login",passport.authenticate("local", {failureRedirect:"/login", failureFlash: true}), async(req, res)=>{
+   req.flash("success", "Welcome to EaseRentals");
+   res.redirect("/listings");
+})
+
+//logout
+app.get("/logout", (req, res, next)=>{
+    req.logout((err)=>{
+        if(err){
+            return  next(err);
+        }
+        req.flash("success", "User logged Out Successfully! ");
+        res.redirect("/listings");
+    });
 })
 
 //middleware

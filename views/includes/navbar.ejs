@@ -5,11 +5,20 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-link active" href="/">Home</a>
-        <a class="nav-link" href="/listings">All listings</a>
-        <a class="nav-link" href="/listings/new">Add new listings</a>
-      </div>
+        <div class="navbar-nav">
+          <a class="nav-link active" href="/">Home</a>
+          <a class="nav-link" href="/listings">All listings</a>
+          <a class="nav-link" href="/listings/new">Add new listings</a>
+        </div>
+        <div class="navbar-nav ms-auto">
+          <% if(!currtUser) { %>
+            <a class="nav-link active" href="/signup">Sign up</a>
+          <a class="nav-link" href="/login">log in</a>
+          <% } %>
+          <% if(currtUser) { %>
+          <a class="nav-link" href="/logout">logout</a>
+          <% } %>
+        </div>
     </div>
   </div>
 </nav>
