@@ -140,10 +140,14 @@ app.post("/signup", async(req, res)=>{
         let {username, password, email} = req.body
     const newUser = new User({email, username});
     const registeredUser = await User.register(newUser, password);
-    req.login(registeredUser)
-    console.log(registeredUser);
-    req.flash("success", "Welcome to EaseRentals");
-    res.redirect("/listings");
+    req.login(registeredUser,(err)=>{
+        if(err){
+            return next(err);
+        }
+        req.flash("success", "Welcome to EaseRentals");
+        res.redirect("/listings");
+    })
+   
     }catch(e){
         req.flash("error", e.message);
         res.redirect("/signup");
