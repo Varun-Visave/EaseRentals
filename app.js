@@ -18,6 +18,7 @@ const User = require("./models/user.js");
 //router objects;
 const listings = require("./routes/listing.js"); 
 const user = require("./models/user.js");
+const { isLoggedIn, isReviewAuthor } = require("./middleware.js");
 // const review = require("./routes/review.js");
 // const user = require("./routes/user.js");   
 
@@ -101,9 +102,10 @@ app.use("/listings", listings); // router methode
 
 //Reviews
 // POST review route
-app.post("/listings/:id/reviews", wrapAsync(async(req, res)=>{
+app.post("/listings/:id/reviews",isLoggedIn, wrapAsync(async(req, res)=>{
     let listing = await Listing.findById(req.params.id);
     let newReview = new Reviews(req.body.review);
+    newReview.author = req.user._id;
     listing.reviews.push(newReview);   
     await newReview.save(); 
     await listing.save();   
@@ -113,7 +115,7 @@ app.post("/listings/:id/reviews", wrapAsync(async(req, res)=>{
 }));
 
 //Delete review Route
-app.delete("/listings/:id/reviews/:reviewId", wrapAsync(async (req, res)=>{
+app.delete("/listings/:id/reviews/:reviewId",isLoggedIn,isReviewAuthor, wrapAsync(async (req, res)=>{
     let { id , reviewId } = req.params;
     await Listing.findByIdAndUpdate(id, {$pull:{reviews: reviewId}});
     await Reviews.findByIdAndDelete(reviewId);

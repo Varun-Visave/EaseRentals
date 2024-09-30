@@ -12,6 +12,8 @@
     </div>
     <ul>
       <div class="mb-3">
+        <b>Owned by :-  <i><%= listing.owner.username %></i></b>
+        <br>
         <li class="form-control"><%= listing.description %></li>
       </div>
       <div class="mb-3">
@@ -32,6 +34,9 @@
   </div>
 </div>
 <br />
+
+
+<% if(currtUser && currtUser._id.equals(listing.owner._id)) { %>
 <div class="row">
   <div class="offset-2 ">
     <!-- <form method="PUT" action="/listings/<%= listing._id %>/edit?_method=POST">
@@ -44,12 +49,16 @@
     </form>
     <br/><br/>
   </div>
+  <% } %>
 </div>
 
 
+
 <!-- review  -->
+
 <div class="rate">
   <div class="col-8 offset-3 w-100">
+    <% if(currtUser) { %>
     <h4 class="leaveARating">Leave a Rating</h4>
     <br>    
     <form action="/listings/<%=listing._id%>/reviews" method="POST" novalidate class="needs-validation">
@@ -74,6 +83,7 @@
       <button class="btn btn-outline-dark">Submit</button>
       <br> <br>
     </form>
+    <% } %>
 
     <hr>
     <p><b>All reviews</b></p>
@@ -81,7 +91,7 @@
   <% for(review of listing.reviews){ %>
     <div class="card col-5 ms-3 mb-3">
       <div class="card-body">
-        <h5 class="card-title">Jon</h5>
+        <h5 class="card-title"><%= review.author.username %></h5>
         <p class="card-text"><%= review.comment %> </p>
         <p class="card-text"><%= review.rating %>&#11088</p>
       
