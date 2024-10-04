@@ -3,7 +3,7 @@
 <div class="row">
   <div class="col-8 offset-2">
     <h3>Create a new listing</h3>
-    <form method="POST" action="/listings" class="needs-validation">
+    <form method="POST" action="/listings" class="needs-validation" enctype="multipart/form-data">
       <div>
         <label for="title" class="form-label">Title</label>
         <input
@@ -22,7 +22,7 @@
       </div>
 
       <br />
-      <div>
+      <!-- <div>
         <label for="image" class="form-label">Image Link</label>
         <input
           name="listing[image][url]"
@@ -30,6 +30,15 @@
           class="form-control"
           placeholder="Enter the IMG URL/Link"
           required
+        />
+      </div> -->
+  
+      <div>
+        <label for="image" class="form-label">Upload Image</label>
+        <input
+          name="listing[image][url]"
+          type="file"
+          class="form-control"
         />
       </div>
 

@@ -5,6 +5,9 @@ const { listingSchema, reviewSchema } = require("../schema.js");
 const ExpressErrors = require("../utils/ExpressErrors.js");
 const Listing = require("../models/listing.js");
 const { isLoggedIn, isOwner } = require("../middleware.js");
+const multer = require("multer");
+const { storage } = require("../CloudConfig.js");
+const upload = multer({ storage });
 
 
 //validate schema
@@ -31,13 +34,17 @@ router.get("/new", isLoggedIn, (req, res) => {
 });
 
 // Create Route
-router.post("/", wrapAsync(async (req, res, next) => {
-    const newListing = new Listing(req.body.listing);
-    newListing.owner = req.user._id;
-    await newListing.save();
-    req.flash("success", "New listing Created!");
-    res.redirect("/listings");
-}));
+// router.post("/", wrapAsync(async (req, res, next) => {
+//     const newListing = new Listing(req.body.listing);
+//     newListing.owner = req.user._id;
+//     await newListing.save();
+//     req.flash("success", "New listing Created!");
+//     res.redirect("/listings");
+// }));
+
+router.post(upload.single("listing[image]"), (req, res)=>{
+    res.send(req.file);
+});
 
 // Edit route
 router.get("/:id/edit", isLoggedIn, isOwner, wrapAsync(async (req, res) => {
