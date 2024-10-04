@@ -11,8 +11,8 @@ const listingSchema = new Schema({
     description: String,
     image: {
         type: mongoose.Schema.Types.Mixed,
-        default: "https://pixabay.com/photos/house-structure-real-estate-concept-1353389/",
-        set:(v) => v === "" ? "https://pixabay.com/photos/house-structure-real-estate-concept-1353389/" : v,
+        url: String,
+        filename: String,
     },
     price: Number,
     location: String,
