@@ -182,6 +182,13 @@ app.get("/logout", (req, res, next)=>{
     });
 })
 
+
+//jo save karna h info uska code likh diyo 
+//buy route
+app.post("/buy", isLoggedIn, wrapAsync(async(req, res)=>{    
+    res.render("listings/buy.ejs");
+}))
+
 //middleware
 app.all("*",(req, res, next)=>{
     next(new ExpressErrors(404, "Page not found!"));

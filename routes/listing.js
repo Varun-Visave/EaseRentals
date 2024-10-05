@@ -9,6 +9,9 @@ const multer = require("multer");
 const { storage } = require("../CloudConfig.js");
 const upload = multer({ storage });
 
+// const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
+// const maptoken = process.env.MAP_TOKEN;
+// const geocodingClient = mbxGeocoding({ accessToken: maptoken });     
 
 //validate schema
 const validateSchema = (req, res, next) => {
@@ -35,11 +38,22 @@ router.get("/new", isLoggedIn, (req, res) => {
 
 // Create Route
 router.post("/", isLoggedIn, upload.single("listing[image][url]"),wrapAsync(async (req, res, next) => {
+
+    // let response = await geocodingClient.forwardGeocode({
+    //     query: req.body.listing.location,
+    //     limit: 1
+    //   })
+    //     .send()
+
+    
     let url = req.file.path;
     let filename = req.file.filename;
     const newListing = new Listing(req.body.listing);
     newListing.owner = req.user._id;
     newListing.image = {url, filename};
+
+    //   newListing.geometry =  response.body.features[0].geometry;
+
     await newListing.save();
     req.flash("success", "New listing Created!");
     res.redirect("/listings");
@@ -104,6 +118,8 @@ router.get("/:id", wrapAsync(async (req, res) => {
     }
     res.render("listings/show.ejs", { listing });
 }));
+
+
 
 
 module.exports = router;

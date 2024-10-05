@@ -1,0 +1,95 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card border-danger shadow-lg">
+        <div class="card-header bg-danger text-white text-center">
+          <h2>Complete Your Booking</h2>
+        </div>
+        <div class="card-body bg-white">
+          <form action="/buy" method="POST" novalidate class="needs-validation">
+            
+            <!-- Name Input -->
+            <div class="form-group mb-3">
+              <label for="name" class="form-label">Name</label>
+              <input
+                type="text"
+                id="name"
+                name="buyer[name]"
+                class="form-control border border-danger"
+                placeholder="Enter your name"
+                required
+              />
+            </div>
+            
+            <!-- Phone Number Input -->
+            <div class="form-group mb-3">
+              <label for="phone" class="form-label">Phone Number</label>
+              <input
+                type="tel"
+                id="phone"
+                name="buyer[phone]"
+                class="form-control border border-danger"
+                placeholder="Enter your phone number"
+                required
+              />
+            </div>
+
+            <!-- Date Picker -->
+            <div class="form-group mb-3">
+              <label for="bookingDate" class="form-label">Select Booking Date</label>
+              <input
+                type="date"
+                id="bookingDate"
+                name="booking[date]"
+                class="form-control border border-danger"
+                required
+              />
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-danger w-100 mt-3">
+              Book Now
+            </button>
+          
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Additional styling for red-and-white theme -->
+<style>
+  .container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  .card {
+    border-radius: 15px;
+    padding: 20px;
+  }
+  .card-header {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    padding: 15px;
+  }
+  .form-control {
+    border-radius: 8px;
+    padding: 12px;
+  }
+  button {
+    font-size: 18px;
+    padding: 10px 20px;
+    border-radius: 10px;
+  }
+  .btn-danger {
+    background-color: #c95050;;
+    border-color: #c95050;
+  }
+  .btn-danger:hover {
+    background-color: #c95050;
+    border-color: #c95050;
+  }
+</style>

@@ -1,4 +1,8 @@
 <% layout("/layouts/boilerplate") %>
+<script>
+  const maptoken = "<%= process.env.MAP_TOKEN %>";
+</script>
+
 <div class="row">
   <div class="col-8 offset-2">
     <br />
@@ -33,7 +37,15 @@
     </ul>
   </div>
 </div>
-<br />
+
+<br>
+<div class="row">
+  <div class="offset-2 ">
+<form method="POST" action="/buy">
+  <button class="btn btn-success edit-btn">Rent this listing</button>
+</form>
+</div>
+</div>
 
 
 <% if(currtUser && currtUser._id.equals(listing.owner._id)) { %>
@@ -86,8 +98,9 @@
     <% } %>
 
     <hr>
-    <p><b>All reviews</b></p>
+  
   <div class="row">
+    <p><b>All reviews</b></p>
   <% for(review of listing.reviews){ %>
     <div class="card col-5 ms-3 mb-3">
       <div class="card-body">
@@ -102,7 +115,6 @@
   </div>  
   <% } %>
 </div>
-  </div>
 </div>
 
 <script>
@@ -113,3 +125,5 @@
     ratingValueElement.textContent = stars;
   }
 </script>
+
+<script src="/js/map.js"></script>
