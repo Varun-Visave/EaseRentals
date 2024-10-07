@@ -37,15 +37,7 @@ router.get("/new", isLoggedIn, (req, res) => {
 });
 
 // Create Route
-router.post("/", isLoggedIn, upload.single("listing[image][url]"),wrapAsync(async (req, res, next) => {
-
-    // let response = await geocodingClient.forwardGeocode({
-    //     query: req.body.listing.location,
-    //     limit: 1
-    //   })
-    //     .send()
-
-    
+router.post("/", isLoggedIn, upload.single("listing[image][url]"),wrapAsync(async (req, res, next) => {    
     let url = req.file.path;
     let filename = req.file.filename;
     const newListing = new Listing(req.body.listing);
@@ -118,8 +110,5 @@ router.get("/:id", wrapAsync(async (req, res) => {
     }
     res.render("listings/show.ejs", { listing });
 }));
-
-
-
 
 module.exports = router;

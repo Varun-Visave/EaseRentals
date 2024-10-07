@@ -26,7 +26,8 @@ const { isLoggedIn, isReviewAuthor } = require("./middleware.js");
 // const review = require("./routes/review.js");
 // const user = require("./routes/user.js");   
 
-const MONGO_URL = "mongodb://127.0.0.1:27017/easeRentals";
+// const MONGO_URL = "mongodb://127.0.0.1:27017/easeRentals";
+const dbURL = process.env.ATLAS_DB_URL;
 
 main()
     .then(() => {
@@ -37,7 +38,7 @@ main()
     });
 
 async function main() {
-    await mongoose.connect(MONGO_URL);
+    await mongoose.connect(dbURL);
 }
 
 app.set("view engine", "ejs");
