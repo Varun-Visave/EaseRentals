@@ -14,6 +14,7 @@ const ExpressErrors = require("./utils/ExpressErrors.js");
 const {listingSchema, reviewSchema} = require("./schema.js");
 const Reviews = require("./models/review.js");
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -48,9 +49,23 @@ app.use(methodOverride("_method"));
 app.engine('ejs', ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 
+//mongo store
+const store = MongoStore.create({
+    mongoUrl: dbURL,
+    crypto: {
+        secret: process.env.SECRET,
+    },
+    tocuhAfter: 24 * 3600,
+});
+
+store.on("error", ()=>{
+    console.log("ERROR IN MONGO STORE", err);
+});
+
 //Sessions
 const sessionOptions = {
-    secret: "easeRentals",
+    store, 
+    secret: process.env.SECRET,
     resave: false,  
     saveUninitialized: true,
     cookie: {
