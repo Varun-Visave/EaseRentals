@@ -133,3 +133,7 @@ body {
     height: 400px;
     width: 150vh;
 }
+
+.reviews {
+  display: flex;
+}
