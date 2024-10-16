@@ -18,14 +18,17 @@ const model = genAI.getGenerativeModel({
     temperature: 0.8,
   },
 });
-
+  
 let geminiResponse = "";
 
 async function generateContent(userPrompt) {
   try {
     const result = await model.generateContent(
       // window.localStorage.getItem("user-prompt")
-      userPrompt+", dont give any introduction, dont give any conclusion, only list out, only answer to this prompt if this a travelling or health care related question else respond with 'I am here to help you with your travel queries and needs only.'"
+      userPrompt +
+        ", dont give any introduction, dont give any conclusion," +
+        " only list out, only answer to this prompt if this a travelling" +
+        " or health care related question else respond with 'I can assist you with travel-related questions and health needs only.'"
     );
     // console.log(result.response.text());
     geminiResponse = result.response.text();

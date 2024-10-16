@@ -7,7 +7,7 @@
     font-family: Arial, sans-serif;
   }
 
-  .container{
+  .container {
     margin-top: 10px;
     margin-bottom: 10px;
   }
@@ -33,7 +33,7 @@
   }
 
   h1 {
-    color:#c95050;
+    color: #c95050;
     text-align: center;
     margin-bottom: 20px;
   }
@@ -41,6 +41,8 @@
   label {
     color: #c95050;
     font-weight: bold;
+    text-wrap: nowrap;
+    margin-right: 10px;
   }
 
   input {
@@ -71,6 +73,12 @@
     background-color: #c95050;
   }
 
+  .btn-inline {
+    width: auto;
+    display: inline-block;
+    margin-left: 10px;
+  }
+
   .valid-feedback {
     color: green;
   }
@@ -86,6 +94,20 @@
   .form-control:valid {
     border-color: green;
   }
+
+  .otp-section {
+    display: flex;
+    align-items: center;
+  }
+
+  .otp-section input {
+    margin-right: 10px;
+    flex-grow: 1;
+  }
+
+  .otp-section button {
+    flex-shrink: 0;
+  }
 </style>
 
 <div class="container">
@@ -93,7 +115,14 @@
     <div class="col-md-6">
       <div class="signup-container">
         <h1>Sign Up to EaseRentals</h1>
-        <form action="/signup" method="POST" class="needs-validation" novalidate>
+        <form
+          id="signupForm"
+          action="/signup"
+          method="POST"
+          class="needs-validation"
+          novalidate
+        >
+          <!-- Username Field -->
           <div class="mb-3">
             <label for="username" class="form-label">Username</label>
             <input
@@ -108,20 +137,48 @@
             <div class="invalid-feedback">Please enter a username.</div>
           </div>
 
+          <!-- Email Field with Send OTP Button -->
           <div class="mb-3">
             <label for="email" class="form-label">Email</label>
+            <div class="input-group">
+              <input
+                name="email"
+                placeholder="Enter Email"
+                id="email"
+                type="email"
+                class="form-control"
+                required
+              />
+              <button type="button" class="btn btn-inline" id="sendOtpBtn">
+                Send OTP
+              </button>
+            </div>
+            <div class="valid-feedback">Looks Good!</div>
+            <div class="invalid-feedback">
+              Please enter a valid email address.
+            </div>
+          </div>
+
+          <!-- OTP Field with Verify Button -->
+          <div class="mb-3 otp-section">
+            <label for="verify-mail" class="form-label">Verify Mail</label>
             <input
-              name="email"
-              placeholder="Enter Email"
-              id="email"
-              type="email"
+              name="otp"
+              placeholder="Enter OTP"
+              id="verify-mail"
+              type="text"
               class="form-control"
               required
             />
-            <div class="valid-feedback">Looks Good!</div>
-            <div class="invalid-feedback">Please enter a valid email address.</div>
+            <button type="button" class="btn btn-inline" id="verifyOtpBtn">
+              Verify
+            </button>
+            <div id="otpFeedback" class="invalid-feedback">
+              Please enter the OTP to verify your email.
+            </div>
           </div>
 
+          <!-- Password Field -->
           <div class="mb-3">
             <label for="password" class="form-label">Password</label>
             <input
@@ -136,7 +193,10 @@
             <div class="invalid-feedback">Please enter a password.</div>
           </div>
 
-          <button type="submit" class="btn btn-success">Sign Up</button>
+          <!-- Submit Button -->
+          <button type="submit" class="btn" id="submitBtn" disabled>
+            Sign Up
+          </button>
         </form>
       </div>
     </div>
@@ -144,23 +204,139 @@
 </div>
 
 <script>
+  // Function to send a simple POST request to /sendMail
+  function startMailService(mail, buttonElement) {
+    // console.log("Sending mail:", mail);
+    fetch('http://localhost:8080/sendMail', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ mail: mail })  // Send the email as part of the request body
+    })
+    .then((response) => response.json())
+    .then((data) => {
+        console.log("POST request successful:", data);
+        // Change button text to 'Sent!' when the request is successful
+        buttonElement.textContent = "Sent!";
+    })
+    .catch((error) => {
+        console.error("Error with POST request:", error);
+        // Optionally, revert the button text or show an error message
+        buttonElement.textContent = "Send OTP";  // Reset to original state on error
+    });
+}
+
+// JavaScript to handle OTP button functionality
+let isOtpVerified = false; // To track if OTP is verified
+
+document.getElementById("sendOtpBtn").addEventListener("click", function () {
+    const emailField = document.getElementById("email");
+
+    // Check if the email is valid using HTML5 validation
+    if (!emailField.checkValidity()) {
+        emailField.classList.add("is-invalid");
+        return;  // Exit if email is invalid
+    }
+
+    // Call the function to send the email value to the server
+    console.log("Sending OTP to " + emailField.value);
+    
+    // Pass the button element as a parameter to update its text when mail service is done
+    startMailService(emailField.value, this);  
+
+    // Update UI elements
+    emailField.classList.remove("is-invalid");
+    this.textContent = "Sending...";  // Change button text to 'Sending' while waiting for response
+});
+
+
+function verifyOtp(otp) {
+    fetch('http://localhost:8080/verifyOtp', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ otp: otp })
+    })
+    .then((response) => response.json())
+    .then((data) => {
+        if (data.message === "OTP verified successfully!") {
+            // console.log("OTP verified");
+            document.getElementById("otpFeedback").style.display = "none";
+            isOtpVerified = true; // Mark OTP as verified
+            document.getElementById("submitBtn").disabled = false; // Enable the submit button
+            document.getElementById("verifyOtpBtn").disabled = false;
+            document.getElementById("verifyOtpBtn").style.backgroundColor = "#ed9b9b";
+            document.getElementById("verifyOtpBtn").textContent = "Verified!"
+
+          } else {
+            document.getElementById("submitBtn").disabled = true;
+            // console.log("OTP invalid:", data.message);
+            const otpFeedback = document.getElementById("otpFeedback");
+            otpFeedback.textContent = "Invalid OTP, please try again!";
+            otpFeedback.style.display = "block";
+            document.getElementById("verify-mail").classList.add("is-invalid");
+        }
+    })
+    .catch((error) => {
+        console.error("Error with POST request:", error); 
+     });
+}
+
+  // JavaScript to handle OTP verification
+  document
+    .getElementById("verifyOtpBtn")
+    .addEventListener("click", function () {
+      const otpField = document.getElementById("verify-mail");
+      const otpFeedback = document.getElementById("otpFeedback");
+      if (otpField.value.trim() === "") {
+        otpField.classList.add("is-invalid");
+        otpFeedback.style.display = "block";
+        return;
+      }
+
+      // Simulate OTP verification
+      verifyOtp(otpField.value);
+      otpField.classList.remove("is-invalid");
+      otpField.classList.add("is-valid");
+      otpFeedback.style.display = "none";
+
+      isOtpVerified = true; // Mark OTP as verified
+      document.getElementById("submitBtn").disabled = false; // Enable the submit button
+    });
+
   // JavaScript to enable Bootstrap form validation
   (function () {
-    'use strict';
+    "use strict";
 
-    window.addEventListener('load', function () {
-      // Fetch all the forms we want to apply custom validation to
-      var forms = document.getElementsByClassName('needs-validation');
-      // Loop over them and prevent submission
-      var validation = Array.prototype.filter.call(forms, function (form) {
-        form.addEventListener('submit', function (event) {
-          if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
-          }
-          form.classList.add('was-validated');
-        }, false);
-      });
-    }, false);
+    window.addEventListener(
+      "load",
+      function () {
+        // Fetch all the forms we want to apply custom validation to
+        var forms = document.getElementsByClassName("needs-validation");
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function (form) {
+          form.addEventListener(
+            "submit",
+            function (event) {
+              if (form.checkValidity() === false || !isOtpVerified) {
+                event.preventDefault();
+                event.stopPropagation();
+                if (!isOtpVerified) {
+                  const otpField = document.getElementById("verify-mail");
+                  otpField.classList.add("is-invalid");
+                  document.getElementById("otpFeedback").style.display =
+                    "block";
+                }
+              }
+              form.classList.add("was-validated");
+            },
+            false
+          );
+        });
+      },
+      false
+    );
   })();
 </script>
