@@ -6,7 +6,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"node gemini/gemini.js\" \"node app.js\"",
+    "start": "concurrently \"node app.js\" \"wait-on http://localhost:8080 && node gemini/gemini.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -36,7 +36,8 @@
     "otp-generator": "^4.0.1",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
-    "passport-local-mongoose": "^8.0.0"
+    "passport-local-mongoose": "^8.0.0",
+    "wait-on": "^8.0.1"
   },
   "devDependencies": {
     "concurrently": "^9.0.1"
