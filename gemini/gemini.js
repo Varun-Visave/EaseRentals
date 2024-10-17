@@ -4,10 +4,10 @@ const cors = require("cors");
 const express = require("express");
 const app = express();
 app.use(cors());
-const port = 3000;
 
 dotenv.config();
 
+const port = process.env.GEMINI_PORT;
 const genAI = new GoogleGenerativeAI(process.env.API_KEY);
 const model = genAI.getGenerativeModel({
   model: "gemini-1.5-flash",
