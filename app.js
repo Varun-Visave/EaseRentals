@@ -248,13 +248,13 @@ app.post(
   "/booked",
   isLoggedIn,
   wrapAsync(async (req, res) => {
-    const email = req.body.buyer.email;
-    const name = req.body.buyer.name;
-    const phone = req.body.buyer.phone;
-    const bookingDate = req.body.booking.date;
-
-    sendBookingConfirmationEmail(email, name, phone, bookingDate);
-  
+    const email = req.body.buyer.email.trim();
+    const name = req.body.buyer.name.trim();
+    const phone = req.body.buyer.phone.trim();
+    const bookingDate = req.body.booking.date.trim();
+    if (email && name && phone && bookingDate) {
+      sendBookingConfirmationEmail(email, name, phone, bookingDate);
+    }
     // Now you can use this data, e.g., save it to the database or render a response
     console.log(`Email: ${email}, Name: ${name}, Phone: ${phone}, Booking Date: ${bookingDate}`);
     res.render("listings/booked.ejs");
